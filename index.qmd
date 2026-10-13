@@ -1,0 +1,294 @@
+---
+title: "Features and Targets in Machine Learning"
+---
+
+When training a model, we need to answer two important questions:
+
+1.  What information should the model use to make predictions?
+2.  What are we trying to predict?
+
+These questions introduce two fundamental concepts in supervised machine learning: **features** and **targets**.
+
+In this tutorial, we'll learn how to identify features and targets, separate them using Python's pandas library, and avoid common mistakes when choosing variables for a prediction problem.
+
+## 1. What Are Features and Targets?
+
+In machine learning, a model learns patterns from data containing input variables and known outcomes.
+
+**Features**: input variables a model uses to make predictions. They provide information that may help explain or predict an outcome.
+
+**Target**: variable we want the model to predict. It is also sometimes called the response variable or dependent variable.
+
+Let's consider our house-price example.
+
+If we want to predict a house's selling price, we might use the following variables:
+
+| yaVariable | Description | Role |
+|------------------------|------------------------|------------------------|
+| `YearRemodAdd` | Remodel date (same as construction date if no remodeling or additions) | Feature |
+| `Neighborhood` | Physical locations within Ames city limits | Feature |
+| `GrLivArea` | Above grade (ground) living area square feet | Feature |
+| `SalePrice` | Selling price | Target |
+
+The features provide information about each house, while the target represents the outcome we want to predict.
+
+We can describe this relationship as:
+
+**Features (**$X$) → Machine-Learning Model → Predicted Target ($\hat{y}$)
+
+In machine learning, features are commonly represented by `X`, while the target is represented by `y`.
+
+An important distinction is that **a variable is not automatically a feature or target based on its name or data type. Its role depends on the prediction question.**
+
+## 2. Identifying Features and Targets in a Real-World Dataset
+
+Now that we understand the concepts of features and targets, let's apply them to a real-world dataset.
+
+We will use the [House Prices — Advanced Regression Techniques dataset](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data) from Kaggle.
+
+Our prediction question is:
+
+**Can we predict a house's selling price based on its characteristics?**
+
+First, let's load the dataset using Python and pandas.
+
+```{python}
+import pandas as pd
+
+houses = pd.read_csv("data/train.csv")
+
+print(houses.shape)
+houses.head()
+```
+
+The `.shape` attribute tells us that the dataset has 1,460 rows and 81 columns. Each row represents a house, while each column represents a variable describing that house.
+
+For this tutorial, we'll focus on five variables:
+
+| Variable | Description | Role |
+|------------------------|------------------------|------------------------|
+| `Id` | Unique identifier for each house | Exclude |
+| `YearRemodAdd` | Year of remodeling, or construction if never remodeled | Feature |
+| `Neighborhood` | Physical location within Ames | Feature |
+| `GrLivArea` | Above-ground living area in square feet | Feature |
+| `SalePrice` | Selling price of the house | Target |
+
+Let's take a look at these variables in our dataset.
+
+```{python}
+houses[["Id", "YearRemodAdd", "Neighborhood", "GrLivArea", "SalePrice"]].head()
+```
+
+Based on our prediction question, **`SalePrice` is the target** because it represents the outcome we want to predict.
+
+We selected three features that describe different characteristics of a house:
+
+- **`YearRemodAdd`** provides information about when the house was last remodeled or constructed.
+- **`Neighborhood`** represents the location of the house.
+- **`GrLivArea`** measures the size of the above-ground living area.
+
+`YearRemodAdd` and `GrLivArea` are numerical variables, while `Neighborhood` is a categorical variable.
+
+This shows that **features do not have to be numerical**. They can also represent categories, such as locations or property types. However, categorical features may need to be converted into numerical representations before training certain machine-learning models.
+
+## 3. Separating Features and Targets with pandas
+
+Once we've identified our features and target, we can separate them into different variables using pandas.
+
+In machine learning, we commonly use `X` to represent the features and `y` to represent the target.
+
+```{python}
+X = houses[["YearRemodAdd", "Neighborhood", "GrLivArea"]]
+y = houses["SalePrice"]
+```
+
+Let's break down this code.
+
+**`X` contains our features.**
+
+We use double square brackets because we're selecting multiple columns from the DataFrame. The result is another DataFrame containing only our three selected features.
+
+```{python}
+X.head()
+```
+
+**`y` contains our target.**
+
+We use single square brackets to select the `SalePrice` column as a pandas Series.
+
+```{python}
+y.head()
+```
+
+We can also check the dimensions of our features and target.
+
+```{python}
+print("Features:", X.shape)
+print("Target:", y.shape)
+```
+
+The results are:
+
+``` text
+Features: (1460, 3)
+Target: (1460,)
+```
+
+This tells us that `X` contains 1,460 observations and three features, while `y` contains 1,460 target values.
+
+### An Alternative: Using `.drop()`
+
+Another way to separate features and the target is by using pandas' `.drop()` method.
+
+```{python}
+X = houses.drop(columns=["Id", "SalePrice"])
+y = houses["SalePrice"]
+```
+
+However, there is an important difference between this approach and our earlier code.
+
+The earlier code explicitly selected **three features**, while `.drop()` removed only `Id` and `SalePrice`, leaving all the other columns as features.
+
+Since our dataset contains many variables, these two approaches produce different feature sets.
+
+For this tutorial, we'll continue using only our three selected features:
+
+```{python}
+X = houses[["YearRemodAdd", "Neighborhood", "GrLivArea"]]
+y = houses["SalePrice"]
+```
+
+You can learn more about selecting and removing columns in the [official pandas DataFrame.drop() documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html).
+
+### Why Do We Separate X and y?
+
+Many supervised machine-learning tools expect the features and target to be provided separately.
+
+For example, a typical model in scikit-learn is trained using the following structure:
+
+``` python
+model.fit(X, y)
+```
+
+Here, `X` contains the information used to learn patterns, while `y` provides the known outcomes.
+
+**Note:** This is a conceptual example, not code to run yet. We haven't created a model, and our categorical feature `Neighborhood` would need to be encoded for many machine-learning algorithms.
+
+The main takeaway is that separating `X` and `y` is an essential preparation step before training a supervised machine-learning model.
+
+## 4. Choosing the Right Features
+
+Identifying the target is usually straightforward once we know our prediction question. However, choosing appropriate features requires more consideration.
+
+Let's look at three important questions to ask when selecting features.
+
+### 1. Does the Variable Contain Potentially Useful Information?
+
+For our housing dataset, `GrLivArea` could be a useful feature because larger houses may tend to have higher selling prices.
+
+Similarly, `Neighborhood` could provide useful information because house prices often vary depending on location.
+
+However, `Id` is simply an identifier assigned to each observation. It does not necessarily contain meaningful information about a house's value.
+
+When choosing features, we should consider whether each variable could help explain or predict the target.
+
+### 2. Will This Information Be Available When Making Predictions?
+
+Suppose we want to predict a house's selling price before it is sold.
+
+We can reasonably use information such as its living area, neighborhood, and remodeling year because these characteristics can be known before the sale.
+
+However, we cannot use the final selling price itself as a feature because that information would not yet be available.
+
+Using information that would not be available at prediction time can cause **data leakage**.
+
+Data leakage occurs when information that should not be available to a model is used during training or evaluation. This can make the model appear more accurate than it would be when making predictions on new data.
+
+### 3. Are We Accidentally Including the Target?
+
+One common mistake is including the target variable among the features.
+
+For example:
+
+```{python}
+#| eval: false
+
+# Incorrect: SalePrice is included in X
+X = houses.drop(columns=["Id"])
+y = houses["SalePrice"]
+```
+
+Here, `SalePrice` appears in both `X` and `y`.
+
+This means the model would have access to the very value it is supposed to predict!
+
+Instead, we should exclude the target from our features.
+
+```{python}
+# Correct
+X = houses[["YearRemodAdd", "Neighborhood", "GrLivArea"]]
+y = houses["SalePrice"]
+```
+
+For more information about data leakage, check out [scikit-learn's guide to common pitfalls](https://scikit-learn.org/stable/common_pitfalls.html).
+
+## 5. Try It Yourself!
+
+Now it's your turn!
+
+Imagine you have a dataset containing information about students' academic performance.
+
+| Variable           | Description                    |
+|--------------------|--------------------------------|
+| `student_id`       | Unique student identifier      |
+| `study_hours`      | Hours spent studying           |
+| `attendance`       | Percentage of classes attended |
+| `previous_gpa`     | Student's previous GPA         |
+| `final_exam_score` | Final exam score               |
+
+Your goal is to **predict a student's final exam score**.
+
+Before looking at the answer, consider these questions:
+
+1.  Which variable should be the target?
+2.  Which variables could be useful features?
+3.  Which variable would you probably exclude?
+
+### Suggested Answer
+
+If the dataset were stored in a DataFrame called `students`, we could write:
+
+```{python}
+# #| eval: false
+
+# X = students[["study_hours", "attendance", "previous_gpa"]]
+# y = students["final_exam_score"]
+```
+
+Here, `final_exam_score` is the **target** because it is the outcome we want to predict.
+
+The variables `study_hours`, `attendance`, and `previous_gpa` are potential **features** because they provide information that may help predict students' exam performance.
+
+We exclude `student_id` because it is simply an identifier.
+
+Notice how the same process applies to both the housing dataset and the student performance dataset, even though the prediction questions are different.
+
+## Conclusion
+
+Understanding the difference between features and targets is an essential first step in building a supervised machine-learning model.
+
+Remember:
+
+- **Features (X)** are the input variables used to make predictions.
+- **The target (y)** is the outcome we want the model to predict.
+- A variable's role depends on the prediction question.
+- Features can be numerical or categorical.
+- Not every available variable should automatically be included as a feature.
+
+**Your next step:** Find another dataset on [Kaggle](https://www.kaggle.com/datasets), define your own prediction question, and use pandas to separate the features and target into `X` and `y`.
+
+Before building a model, ask yourself:
+
+*What am I trying to predict, and what information would be available to help make that prediction?*
+
+Answering these questions will help you choose appropriate features and targets before moving on to model training.

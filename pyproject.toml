@@ -1,0 +1,15 @@
+[project]
+name = "github-pages"
+version = "0.1.0"
+description = "Tutorial Blog: Features and Targets in Machine Learning"
+requires-python = ">=3.11"
+dependencies = [
+    "ipykernel>=6.29",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.9",
+    "notebook>=7.6.3",
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "pyyaml>=6.0.3",
+]
+
