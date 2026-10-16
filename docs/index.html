@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Features and Targets in Machine Learning</title>
+<title>Choosing Features and Targets in Machine Learning – Features and Targets in Machine Learning</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -186,22 +186,16 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-are-features-and-targets" id="toc-what-are-features-and-targets" class="nav-link active" data-scroll-target="#what-are-features-and-targets">1. What Are Features and Targets?</a></li>
+  <li><a href="#what-are-features-and-targets-and-why-does-it-matter" id="toc-what-are-features-and-targets-and-why-does-it-matter" class="nav-link active" data-scroll-target="#what-are-features-and-targets-and-why-does-it-matter">1. What Are Features and Targets and why does it matter?</a></li>
   <li><a href="#identifying-features-and-targets-in-a-real-world-dataset" id="toc-identifying-features-and-targets-in-a-real-world-dataset" class="nav-link" data-scroll-target="#identifying-features-and-targets-in-a-real-world-dataset">2. Identifying Features and Targets in a Real-World Dataset</a></li>
   <li><a href="#separating-features-and-targets-with-pandas" id="toc-separating-features-and-targets-with-pandas" class="nav-link" data-scroll-target="#separating-features-and-targets-with-pandas">3. Separating Features and Targets with pandas</a>
   <ul class="collapse">
-  <li><a href="#an-alternative-using-.drop" id="toc-an-alternative-using-.drop" class="nav-link" data-scroll-target="#an-alternative-using-.drop">An Alternative: Using <code>.drop()</code></a></li>
-  <li><a href="#why-do-we-separate-x-and-y" id="toc-why-do-we-separate-x-and-y" class="nav-link" data-scroll-target="#why-do-we-separate-x-and-y">Why Do We Separate X and y?</a></li>
+  <li><a href="#why-do-we-separate-x-and-y" id="toc-why-do-we-separate-x-and-y" class="nav-link" data-scroll-target="#why-do-we-separate-x-and-y">Why Do We Separate X and Y?</a></li>
   </ul></li>
   <li><a href="#choosing-the-right-features" id="toc-choosing-the-right-features" class="nav-link" data-scroll-target="#choosing-the-right-features">4. Choosing the Right Features</a>
   <ul class="collapse">
-  <li><a href="#does-the-variable-contain-potentially-useful-information" id="toc-does-the-variable-contain-potentially-useful-information" class="nav-link" data-scroll-target="#does-the-variable-contain-potentially-useful-information">1. Does the Variable Contain Potentially Useful Information?</a></li>
-  <li><a href="#will-this-information-be-available-when-making-predictions" id="toc-will-this-information-be-available-when-making-predictions" class="nav-link" data-scroll-target="#will-this-information-be-available-when-making-predictions">2. Will This Information Be Available When Making Predictions?</a></li>
-  <li><a href="#are-we-accidentally-including-the-target" id="toc-are-we-accidentally-including-the-target" class="nav-link" data-scroll-target="#are-we-accidentally-including-the-target">3. Are We Accidentally Including the Target?</a></li>
-  </ul></li>
-  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself">5. Try It Yourself!</a>
-  <ul class="collapse">
-  <li><a href="#suggested-answer" id="toc-suggested-answer" class="nav-link" data-scroll-target="#suggested-answer">Suggested Answer</a></li>
+  <li><a href="#does-the-variable-contain-potentially-useful-information" id="toc-does-the-variable-contain-potentially-useful-information" class="nav-link" data-scroll-target="#does-the-variable-contain-potentially-useful-information">Does the Variable Contain Potentially Useful Information?</a></li>
+  <li><a href="#will-this-information-be-available-when-making-predictions" id="toc-will-this-information-be-available-when-making-predictions" class="nav-link" data-scroll-target="#will-this-information-be-available-when-making-predictions">Will This Information Be Available When Making Predictions?</a></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
@@ -212,7 +206,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Features and Targets in Machine Learning</h1>
+<h1 class="title">Choosing Features and Targets in Machine Learning</h1>
 </div>
 
 
@@ -229,61 +223,25 @@ window.Quarto = {
 </header>
 
 
-<p>When training a model, we need to answer two important questions:</p>
+<section id="what-are-features-and-targets-and-why-does-it-matter" class="level2">
+<h2 class="anchored" data-anchor-id="what-are-features-and-targets-and-why-does-it-matter">1. What Are Features and Targets and why does it matter?</h2>
+<p>When training a model in machine learning, we need to answer two important questions:</p>
 <ol type="1">
-<li>What information should the model use to make predictions?</li>
-<li>What are we trying to predict?</li>
+<li><strong>What information should the model use to make predictions?</strong></li>
+<li><strong>What are we trying to predict?</strong></li>
 </ol>
 <p>These questions introduce two fundamental concepts in supervised machine learning: <strong>features</strong> and <strong>targets</strong>.</p>
-<p>In this tutorial, we’ll learn how to identify features and targets, separate them using Python’s pandas library, and avoid common mistakes when choosing variables for a prediction problem.</p>
-<section id="what-are-features-and-targets" class="level2">
-<h2 class="anchored" data-anchor-id="what-are-features-and-targets">1. What Are Features and Targets?</h2>
+<p>In this tutorial, we will learn how to identify features and targets, separate them using Python’s pandas library, and avoid common mistakes when choosing variables for a prediction problem.</p>
 <p>In machine learning, a model learns patterns from data containing input variables and known outcomes.</p>
-<p><strong>Features</strong>: input variables a model uses to make predictions. They provide information that may help explain or predict an outcome.</p>
-<p><strong>Target</strong>: variable we want the model to predict. It is also sometimes called the response variable or dependent variable.</p>
-<p>Let’s consider our house-price example.</p>
-<p>If we want to predict a house’s selling price, we might use the following variables:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>yaVariable</th>
-<th>Description</th>
-<th>Role</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>YearRemodAdd</code></td>
-<td>Remodel date (same as construction date if no remodeling or additions)</td>
-<td>Feature</td>
-</tr>
-<tr class="even">
-<td><code>Neighborhood</code></td>
-<td>Physical locations within Ames city limits</td>
-<td>Feature</td>
-</tr>
-<tr class="odd">
-<td><code>GrLivArea</code></td>
-<td>Above grade (ground) living area square feet</td>
-<td>Feature</td>
-</tr>
-<tr class="even">
-<td><code>SalePrice</code></td>
-<td>Selling price</td>
-<td>Target</td>
-</tr>
-</tbody>
-</table>
-<p>The features provide information about each house, while the target represents the outcome we want to predict.</p>
-<p>We can describe this relationship as:</p>
-<p><strong>Features (</strong><span class="math inline">\(X\)</span>) → Machine-Learning Model → Predicted Target (<span class="math inline">\(\hat{y}\)</span>)</p>
-<p>In machine learning, features are commonly represented by <code>X</code>, while the target is represented by <code>y</code>.</p>
+<ul>
+<li><p><strong>Features</strong>: input variables which a model uses to make predictions. They provide information that could help explain and predict an outcome. It id also called predictors.</p></li>
+<li><p><strong>Target</strong>: variable which we want the model to predict. It is also called the response variable or dependent variable.</p></li>
+</ul>
+<p>We can describe this relationship using linear model:</p>
+<p><span class="math inline">\(Y_i=\beta_0+\beta_1X_{i1}+\beta_2X_{i2}+\beta_3X_{i3}+\varepsilon_i\)</span></p>
+<p>In machine learning, features are represented by <code>X</code>, and the target is represented by Y. <img src="images/Supervised Learning Flowchart-2.png" id="fig-ml-flow" class="img-fluid" alt="Relationship between features, a machine-learning model, and a predicted target."></p>
 <p>An important distinction is that <strong>a variable is not automatically a feature or target based on its name or data type. Its role depends on the prediction question.</strong></p>
+<p>Features give the algorithm the patterns it uses to map input data to the target outcome, and the target shows what problem we are solving and whether the task is classification or regression. Reasonable features lead to high accuracy, and it is important to avoid overfitting.</p>
 </section>
 <section id="identifying-features-and-targets-in-a-real-world-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="identifying-features-and-targets-in-a-real-world-dataset">2. Identifying Features and Targets in a Real-World Dataset</h2>
@@ -292,7 +250,7 @@ window.Quarto = {
 <p>Our prediction question is:</p>
 <p><strong>Can we predict a house’s selling price based on its characteristics?</strong></p>
 <p>First, let’s load the dataset using Python and pandas.</p>
-<div id="b7a2244a" class="cell" data-execution_count="1">
+<div id="4c19b77d" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>houses <span class="op">=</span> pd.read_csv(<span class="st">"data/train.csv"</span>)</span>
@@ -302,7 +260,7 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <pre><code>(1460, 81)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -461,13 +419,46 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>The <code>.shape</code> attribute tells us that the dataset has 1,460 rows and 81 columns. Each row represents a house, while each column represents a variable describing that house.</p>
-<p>For this tutorial, we’ll focus on five variables:</p>
+<p>The dataset has 1,460 rows and 81 columns. Each row represents a house, while each column represents a variable describing that house.</p>
+<p>Let’s consider our house-price example.</p>
+<p>My question is:</p>
+<p><strong>What effects the house price example?</strong></p>
+<p>To build a model to answer this question, we have to find:</p>
+<p><strong>What information should the model use to make predictions?</strong></p>
+<p>These are some variables I found potentially relevant to the house price such as YearRemodAdd, Neighborhood, and GrLivArea. We are trying to see if these contribute to the SalePrice. Therefore, we can set these three variables as the features.</p>
+<table class="caption-top table">
+<caption>These features provide information about each house’s remodeling date, location, and the above grade, while the target represents the outcome we want to predict, which is the price of a house.</caption>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 61%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>YearRemodAdd</code></td>
+<td>Remodel date (same as construction date if no remodeling or additions)</td>
+</tr>
+<tr class="even">
+<td><code>Neighborhood</code></td>
+<td>Physical locations within Ames city limits</td>
+</tr>
+<tr class="odd">
+<td><code>GrLivArea</code></td>
+<td>Above grade (ground) living area square feet</td>
+</tr>
+</tbody>
+</table>
+<p>For this tutorial, we will focus on four variables, including the three features (YearRemodAdd, Neighborhood, GrLivArea) and the target(SalePrice):</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 27%">
+<col style="width: 41%">
+<col style="width: 30%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -478,36 +469,32 @@ window.Quarto = {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>Id</code></td>
-<td>Unique identifier for each house</td>
-<td>Exclude</td>
-</tr>
-<tr class="even">
 <td><code>YearRemodAdd</code></td>
 <td>Year of remodeling, or construction if never remodeled</td>
 <td>Feature</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>Neighborhood</code></td>
 <td>Physical location within Ames</td>
 <td>Feature</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>GrLivArea</code></td>
 <td>Above-ground living area in square feet</td>
 <td>Feature</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>SalePrice</code></td>
 <td>Selling price of the house</td>
 <td>Target</td>
 </tr>
 </tbody>
 </table>
-<p>Let’s take a look at these variables in our dataset.</p>
-<div id="064db65a" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>houses[[<span class="st">"Id"</span>, <span class="st">"YearRemodAdd"</span>, <span class="st">"Neighborhood"</span>, <span class="st">"GrLivArea"</span>, <span class="st">"SalePrice"</span>]].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<p>Let’s filter the variables and save it into <code>data_for_model.</code></p>
+<div id="875d1f86" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_for_model <span class="op">=</span> houses.loc[:,[<span class="st">"YearRemodAdd"</span>, <span class="st">"Neighborhood"</span>, <span class="st">"GrLivArea"</span>, <span class="st">"SalePrice"</span>]]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_for_model.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
 <div>
 
 
@@ -515,7 +502,6 @@ window.Quarto = {
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Id</th>
 <th data-quarto-table-cell-role="th">YearRemodAdd</th>
 <th data-quarto-table-cell-role="th">Neighborhood</th>
 <th data-quarto-table-cell-role="th">GrLivArea</th>
@@ -525,7 +511,6 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>1</td>
 <td>2003</td>
 <td>CollgCr</td>
 <td>1710</td>
@@ -533,7 +518,6 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>2</td>
 <td>1976</td>
 <td>Veenker</td>
 <td>1262</td>
@@ -541,7 +525,6 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>3</td>
 <td>2002</td>
 <td>CollgCr</td>
 <td>1786</td>
@@ -549,7 +532,6 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>4</td>
 <td>1970</td>
 <td>Crawfor</td>
 <td>1717</td>
@@ -557,7 +539,6 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
-<td>5</td>
 <td>2000</td>
 <td>NoRidge</td>
 <td>2198</td>
@@ -569,30 +550,21 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Based on our prediction question, <strong><code>SalePrice</code> is the target</strong> because it represents the outcome we want to predict.</p>
-<p>We selected three features that describe different characteristics of a house:</p>
-<ul>
-<li><strong><code>YearRemodAdd</code></strong> provides information about when the house was last remodeled or constructed.</li>
-<li><strong><code>Neighborhood</code></strong> represents the location of the house.</li>
-<li><strong><code>GrLivArea</code></strong> measures the size of the above-ground living area.</li>
-</ul>
-<p><code>YearRemodAdd</code> and <code>GrLivArea</code> are numerical variables, while <code>Neighborhood</code> is a categorical variable.</p>
-<p>This shows that <strong>features do not have to be numerical</strong>. They can also represent categories, such as locations or property types. However, categorical features may need to be converted into numerical representations before training certain machine-learning models.</p>
 </section>
 <section id="separating-features-and-targets-with-pandas" class="level2">
 <h2 class="anchored" data-anchor-id="separating-features-and-targets-with-pandas">3. Separating Features and Targets with pandas</h2>
-<p>Once we’ve identified our features and target, we can separate them into different variables using pandas.</p>
-<p>In machine learning, we commonly use <code>X</code> to represent the features and <code>y</code> to represent the target.</p>
-<div id="c34ae280" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> houses[[<span class="st">"YearRemodAdd"</span>, <span class="st">"Neighborhood"</span>, <span class="st">"GrLivArea"</span>]]</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> houses[<span class="st">"SalePrice"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Once we’ve identified our features and target, let’s separate them into different variables using pandas.</p>
+<p>In machine learning, we commonly use <code>X</code> to represent the features and <code>Y</code> to represent the target.</p>
+<div id="657b2dfb" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data_for_model.loc[:,[<span class="st">"YearRemodAdd"</span>, <span class="st">"Neighborhood"</span>, <span class="st">"GrLivArea"</span>]]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> data_for_model.loc[:,<span class="st">"SalePrice"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s break down this code.</p>
 <p><strong><code>X</code> contains our features.</strong></p>
-<p>We use double square brackets because we’re selecting multiple columns from the DataFrame. The result is another DataFrame containing only our three selected features.</p>
-<div id="d0aa23f1" class="cell" data-execution_count="4">
+<p>The result is another DataFrame containing only our three selected features.</p>
+<div id="c8c90236" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 
 
@@ -642,11 +614,11 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p><strong><code>y</code> contains our target.</strong></p>
-<p>We use single square brackets to select the <code>SalePrice</code> column as a pandas Series.</p>
-<div id="83993192" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>y.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<p><strong><code>Y</code> contains our target.</strong></p>
+<p>We select the <code>SalePrice</code> column as a Series.</p>
+<div id="c93687fd" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Y.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>0    208500
 1    181500
 2    223500
@@ -656,43 +628,23 @@ Name: SalePrice, dtype: int64</code></pre>
 </div>
 </div>
 <p>We can also check the dimensions of our features and target.</p>
-<div id="7457e83e" class="cell" data-execution_count="6">
+<div id="29041b4e" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Features:"</span>, X.shape)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Target:"</span>, y.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Target:"</span>, Y.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Features: (1460, 3)
 Target: (1460,)</code></pre>
 </div>
 </div>
-<p>The results are:</p>
-<pre class="text"><code>Features: (1460, 3)
-Target: (1460,)</code></pre>
-<p>This tells us that <code>X</code> contains 1,460 observations and three features, while <code>y</code> contains 1,460 target values.</p>
-<section id="an-alternative-using-.drop" class="level3">
-<h3 class="anchored" data-anchor-id="an-alternative-using-.drop">An Alternative: Using <code>.drop()</code></h3>
-<p>Another way to separate features and the target is by using pandas’ <code>.drop()</code> method.</p>
-<div id="737ffc5e" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> houses.drop(columns<span class="op">=</span>[<span class="st">"Id"</span>, <span class="st">"SalePrice"</span>])</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> houses[<span class="st">"SalePrice"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>However, there is an important difference between this approach and our earlier code.</p>
-<p>The earlier code explicitly selected <strong>three features</strong>, while <code>.drop()</code> removed only <code>Id</code> and <code>SalePrice</code>, leaving all the other columns as features.</p>
-<p>Since our dataset contains many variables, these two approaches produce different feature sets.</p>
-<p>For this tutorial, we’ll continue using only our three selected features:</p>
-<div id="08b99bdd" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> houses[[<span class="st">"YearRemodAdd"</span>, <span class="st">"Neighborhood"</span>, <span class="st">"GrLivArea"</span>]]</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> houses[<span class="st">"SalePrice"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>You can learn more about selecting and removing columns in the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html">official pandas DataFrame.drop() documentation</a>.</p>
-</section>
+<p>This tells us that <code>X</code> contains 1,460 observations and three features, while <code>Y</code> contains 1,460 target values.</p>
 <section id="why-do-we-separate-x-and-y" class="level3">
-<h3 class="anchored" data-anchor-id="why-do-we-separate-x-and-y">Why Do We Separate X and y?</h3>
-<p>Many supervised machine-learning tools expect the features and target to be provided separately.</p>
+<h3 class="anchored" data-anchor-id="why-do-we-separate-x-and-y">Why Do We Separate X and Y?</h3>
+<p>Many machine-learning tools expect the features and target to be provided separately.</p>
 <p>For example, a typical model in scikit-learn is trained using the following structure:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model.fit(X, y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Here, <code>X</code> contains the information used to learn patterns, while <code>y</code> provides the known outcomes.</p>
-<p><strong>Note:</strong> This is a conceptual example, not code to run yet. We haven’t created a model, and our categorical feature <code>Neighborhood</code> would need to be encoded for many machine-learning algorithms.</p>
-<p>The main takeaway is that separating <code>X</code> and <code>y</code> is an essential preparation step before training a supervised machine-learning model.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model.fit(X, Y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, <code>X</code> contains the information used to learn patterns, while <code>Y</code> provides the known outcomes.</p>
+<p>Furthermore, to train the model, our categorical feature <code>Neighborhood</code> would need to be encoded for many machine-learning algorithms.</p>
+<p>The main takeaway is that separating <code>X</code> and <code>Y</code> is an essential preparation step before training a supervised machine-learning model.</p>
 </section>
 </section>
 <section id="choosing-the-right-features" class="level2">
@@ -700,94 +652,18 @@ Target: (1460,)</code></pre>
 <p>Identifying the target is usually straightforward once we know our prediction question. However, choosing appropriate features requires more consideration.</p>
 <p>Let’s look at three important questions to ask when selecting features.</p>
 <section id="does-the-variable-contain-potentially-useful-information" class="level3">
-<h3 class="anchored" data-anchor-id="does-the-variable-contain-potentially-useful-information">1. Does the Variable Contain Potentially Useful Information?</h3>
-<p>For our housing dataset, <code>GrLivArea</code> could be a useful feature because larger houses may tend to have higher selling prices.</p>
-<p>Similarly, <code>Neighborhood</code> could provide useful information because house prices often vary depending on location.</p>
-<p>However, <code>Id</code> is simply an identifier assigned to each observation. It does not necessarily contain meaningful information about a house’s value.</p>
+<h3 class="anchored" data-anchor-id="does-the-variable-contain-potentially-useful-information">Does the Variable Contain Potentially Useful Information?</h3>
+<p>For our housing dataset, <code>GrLivArea</code> could be a useful feature because houses at higher level may tend to have higher selling prices.</p>
+<p>Similarly, <code>Neighborhood</code> could provide useful information because house prices often vary depending on location. For example, houses in safe area with low-crime rate could be more expensive than houses in an area with high-crime rate.</p>
 <p>When choosing features, we should consider whether each variable could help explain or predict the target.</p>
 </section>
 <section id="will-this-information-be-available-when-making-predictions" class="level3">
-<h3 class="anchored" data-anchor-id="will-this-information-be-available-when-making-predictions">2. Will This Information Be Available When Making Predictions?</h3>
+<h3 class="anchored" data-anchor-id="will-this-information-be-available-when-making-predictions">Will This Information Be Available When Making Predictions?</h3>
 <p>Suppose we want to predict a house’s selling price before it is sold.</p>
-<p>We can reasonably use information such as its living area, neighborhood, and remodeling year because these characteristics can be known before the sale.</p>
+<p>We can use information such as its living area, neighborhood, and remodeling year because these characteristics can be known before the sale.</p>
 <p>However, we cannot use the final selling price itself as a feature because that information would not yet be available.</p>
 <p>Using information that would not be available at prediction time can cause <strong>data leakage</strong>.</p>
 <p>Data leakage occurs when information that should not be available to a model is used during training or evaluation. This can make the model appear more accurate than it would be when making predictions on new data.</p>
-</section>
-<section id="are-we-accidentally-including-the-target" class="level3">
-<h3 class="anchored" data-anchor-id="are-we-accidentally-including-the-target">3. Are We Accidentally Including the Target?</h3>
-<p>One common mistake is including the target variable among the features.</p>
-<p>For example:</p>
-<div id="7f026d78" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Incorrect: SalePrice is included in X</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> houses.drop(columns<span class="op">=</span>[<span class="st">"Id"</span>])</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> houses[<span class="st">"SalePrice"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Here, <code>SalePrice</code> appears in both <code>X</code> and <code>y</code>.</p>
-<p>This means the model would have access to the very value it is supposed to predict!</p>
-<p>Instead, we should exclude the target from our features.</p>
-<div id="68e84465" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> houses[[<span class="st">"YearRemodAdd"</span>, <span class="st">"Neighborhood"</span>, <span class="st">"GrLivArea"</span>]]</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> houses[<span class="st">"SalePrice"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>For more information about data leakage, check out <a href="https://scikit-learn.org/stable/common_pitfalls.html">scikit-learn’s guide to common pitfalls</a>.</p>
-</section>
-</section>
-<section id="try-it-yourself" class="level2">
-<h2 class="anchored" data-anchor-id="try-it-yourself">5. Try It Yourself!</h2>
-<p>Now it’s your turn!</p>
-<p>Imagine you have a dataset containing information about students’ academic performance.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Variable</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>student_id</code></td>
-<td>Unique student identifier</td>
-</tr>
-<tr class="even">
-<td><code>study_hours</code></td>
-<td>Hours spent studying</td>
-</tr>
-<tr class="odd">
-<td><code>attendance</code></td>
-<td>Percentage of classes attended</td>
-</tr>
-<tr class="even">
-<td><code>previous_gpa</code></td>
-<td>Student’s previous GPA</td>
-</tr>
-<tr class="odd">
-<td><code>final_exam_score</code></td>
-<td>Final exam score</td>
-</tr>
-</tbody>
-</table>
-<p>Your goal is to <strong>predict a student’s final exam score</strong>.</p>
-<p>Before looking at the answer, consider these questions:</p>
-<ol type="1">
-<li>Which variable should be the target?</li>
-<li>Which variables could be useful features?</li>
-<li>Which variable would you probably exclude?</li>
-</ol>
-<section id="suggested-answer" class="level3">
-<h3 class="anchored" data-anchor-id="suggested-answer">Suggested Answer</h3>
-<p>If the dataset were stored in a DataFrame called <code>students</code>, we could write:</p>
-<div id="e99f5130" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># #| eval: false</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># X = students[["study_hours", "attendance", "previous_gpa"]]</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># y = students["final_exam_score"]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Here, <code>final_exam_score</code> is the <strong>target</strong> because it is the outcome we want to predict.</p>
-<p>The variables <code>study_hours</code>, <code>attendance</code>, and <code>previous_gpa</code> are potential <strong>features</strong> because they provide information that may help predict students’ exam performance.</p>
-<p>We exclude <code>student_id</code> because it is simply an identifier.</p>
-<p>Notice how the same process applies to both the housing dataset and the student performance dataset, even though the prediction questions are different.</p>
 </section>
 </section>
 <section id="conclusion" class="level2">
@@ -796,14 +672,14 @@ Target: (1460,)</code></pre>
 <p>Remember:</p>
 <ul>
 <li><strong>Features (X)</strong> are the input variables used to make predictions.</li>
-<li><strong>The target (y)</strong> is the outcome we want the model to predict.</li>
+<li><strong>The target (Y)</strong> is the outcome we want the model to predict.</li>
 <li>A variable’s role depends on the prediction question.</li>
 <li>Features can be numerical or categorical.</li>
 <li>Not every available variable should automatically be included as a feature.</li>
 </ul>
-<p><strong>Your next step:</strong> Find another dataset on <a href="https://www.kaggle.com/datasets">Kaggle</a>, define your own prediction question, and use pandas to separate the features and target into <code>X</code> and <code>y</code>.</p>
-<p>Before building a model, ask yourself:</p>
-<p><em>What am I trying to predict, and what information would be available to help make that prediction?</em></p>
+<p><strong>Your next step:</strong> Find another dataset on <a href="https://www.kaggle.com/datasets">Kaggle</a>, define your own prediction question, and use pandas to separate the features and target into <code>X</code> and <code>Y</code>.</p>
+<p>Before building a model, ask yourself the two questions:</p>
+<p><em>What am I trying to predict, and what information do I need to make a successful prediction?</em></p>
 <p>Answering these questions will help you choose appropriate features and targets before moving on to model training.</p>
 
 
